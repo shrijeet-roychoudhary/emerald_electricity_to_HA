@@ -206,3 +206,7 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 sampleAPI/emeraldAPI.py
+config.ini
+test_api.py
+emerald_to_ha/.DS_Store
+.DS_Store

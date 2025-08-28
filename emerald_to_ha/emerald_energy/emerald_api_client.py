@@ -89,12 +89,13 @@ class EmeraldApiClient:
         if not self._ensure_token():
             return None
 
-        url = "https://api.emerald-ems.com.au/api/v1/customer/device/get-by-date/flashes-data"
+        url = "https://api.sync.flashdata.ihd.eems.app/customer/device/get-by-date/flashes-data"
+        
         headers = {"Authorization": f"Bearer {self._token}"}
         params = {
-            "device_id": device_id,
             "start_date": start_date,
             "end_date": end_date,
+            "device_id": device_id,
         }
         response = requests.get(url, headers=headers, params=params)
         if response.status_code == 200:

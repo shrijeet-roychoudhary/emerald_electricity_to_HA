@@ -69,10 +69,10 @@ class EmeraldEnergySensor(SensorEntity):
             self._api_client.get_energy_data, self._device_id, today, today
         )
 
-        if energy_data and "daily_consumptions" in energy_data and energy_data["daily_consumptions"]:
-            daily_consumption = energy_data["daily_consumptions"][0]
+        if energy_data and "info" in energy_data and energy_data["info"]["daily_consumptions"]:
+            total_kwh_of_day = energy_data["info"]["daily_consumptions"][0]["total_kwh_of_day"]
             try:
-                self._state = float(daily_consumption["total"])
+                self._state = float(total_kwh_of_day)
             except (ValueError, TypeError):
                 self._state = None
         else:

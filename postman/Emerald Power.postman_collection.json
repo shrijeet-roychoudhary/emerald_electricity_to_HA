@@ -1,0 +1,215 @@
+{
+	"info": {
+		"_postman_id": "f398ec07-b0f1-4cef-bef4-48ba30608cb1",
+		"name": "Emerald Power",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "11233068"
+	},
+	"item": [
+		{
+			"name": "Get Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the JSON response",
+							"let responseData = pm.response.json();",
+							"",
+							"// Extract the value you need and set it as an environment variable",
+							"pm.environment.set(\"TOKEN\", responseData.token);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": " application/json; charset=UTF-8,",
+						"type": "text"
+					},
+					{
+						"key": "User-Agent",
+						"value": " ok,",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": " gzip,",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": " Keep-Alive",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"app_version\": \"1.0.0\",\n    \"device_name\": \"Toaster\",\n    \"device_os_version\": \"26\",\n    \"device_token\": \"\",\n    \"device_type\": \"android\",\n    \"email\": \"{{USERNAME}}\",\n    \"passcode\": null,\n    \"password\": \"{{PASSWORD}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{URL}}/customer/sign-in"
+			},
+			"response": []
+		},
+		{
+			"name": "GET Proprty List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the JSON response",
+							"let responseData = pm.response.json();",
+							"",
+							"// Extract the value you need and set it as an environment variable",
+							"pm.environment.set(\"PROPERTY_ID\", responseData.info.property[0].id);",
+							"pm.environment.set(\"DEVICE_ID_EMERALD\", responseData.info.property[0].devices[0].id);",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{TOKEN}}"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Connection",
+						"value": " Keep-Alive",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": " gzip",
+						"type": "text"
+					},
+					{
+						"key": "User-Agent",
+						"value": " ok",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{URL}}/customer/property/list"
+			},
+			"response": []
+		},
+		{
+			"name": "GET ENERGY DATA by Date Range",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the JSON response",
+							"let responseData = pm.response.json();",
+							"",
+							"// Extract the value you need and set it as an environment variable",
+							"//pm.environment.set(\"PROPERTY_ID\", responseData.info.property[0].id);",
+							"//pm.environment.set(\"DEVICE_ID_EMERALD\", responseData.info.property[0].devices[0].id);",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{TOKEN}}"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Connection",
+						"value": " Keep-Alive",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": " gzip",
+						"type": "text"
+					},
+					{
+						"key": "User-Agent",
+						"value": " ok",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{GET_DATA_URL}}/customer/device/get-by-date/flashes-data?start_date=2025-08-24&end_date=2025-08-25&device_id={{DEVICE_ID_EMERALD}}",
+					"host": [
+						"{{GET_DATA_URL}}"
+					],
+					"path": [
+						"customer",
+						"device",
+						"get-by-date",
+						"flashes-data"
+					],
+					"query": [
+						{
+							"key": "start_date",
+							"value": "2025-08-24"
+						},
+						{
+							"key": "end_date",
+							"value": "2025-08-25"
+						},
+						{
+							"key": "device_id",
+							"value": "{{DEVICE_ID_EMERALD}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
