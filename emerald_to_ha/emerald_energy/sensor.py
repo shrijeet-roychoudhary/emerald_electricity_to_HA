@@ -1,14 +1,14 @@
 from datetime import timedelta, datetime
 import logging
 
-from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
 from .const import DOMAIN
 from .emerald_api_client import EmeraldApiClient
 
 _LOGGER = logging.getLogger(__name__)
 
-SCAN_INTERVAL = timedelta(minutes=60)
+SCAN_INTERVAL = timedelta(minutes=15)
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up the sensor platform."""
@@ -22,11 +22,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         _LOGGER.error("Could not find any properties for this account.")
         return
 
-    device_id = properties["info"]["property"][0]["devices"]["id"]
+    device_id = properties["info"]["property"][0]["devices"][0]["id"]
     
     async_add_entities([EmeraldEnergySensor(api_client, device_id)])
 
-class EmeraldEnergySensor(Entity):
+class EmeraldEnergySensor(SensorEntity):
     """Representation of a Sensor."""
 
     def __init__(self, api_client, device_id):
@@ -35,6 +35,7 @@ class EmeraldEnergySensor(Entity):
         self._device_id = device_id
         self._state = None
         self._unit_of_measurement = "kWh"
+        self._attr_unique_id = f"emerald_energy_{device_id}"
 
     @property
     def name(self):
@@ -51,6 +52,16 @@ class EmeraldEnergySensor(Entity):
         """Return the unit of measurement."""
         return self._unit_of_measurement
 
+    @property
+    def device_class(self):
+        """Return the device class of the sensor."""
+        return "energy"
+
+    @property
+    def state_class(self):
+        """Return the state class of the sensor."""
+        return "total_increasing"
+
     async def async_update(self):
         """Fetch new state data for the sensor."""
         today = datetime.now().strftime("%Y-%m-%d")
@@ -58,8 +69,11 @@ class EmeraldEnergySensor(Entity):
             self._api_client.get_energy_data, self._device_id, today, today
         )
 
-        if energy_data and "daily_consumptions" in energy_data:
+        if energy_data and "daily_consumptions" in energy_data and energy_data["daily_consumptions"]:
             daily_consumption = energy_data["daily_consumptions"][0]
-            self._state = daily_consumption["total"]
+            try:
+                self._state = float(daily_consumption["total"])
+            except (ValueError, TypeError):
+                self._state = None
         else:
             self._state = None
