@@ -1,0 +1,11 @@
+{
+  "domain": "emerald_energy",
+  "name": "Emerald Energy",
+  "config_flow": true,
+  "documentation": "https://github.com/shrijeet-roychoudhary/emerald_electricity_to_HA",
+  "issue_tracker": "https://github.com/shrijeet-roychoudhary/emerald_electricity_to_HA/issues",
+  "codeowners": ["@shrijeet-roychoudhary"],
+  "requirements": ["requests"],
+  "version": "0.1.0",
+  "iot_class": "cloud_polling"
+}
